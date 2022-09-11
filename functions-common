@@ -1732,9 +1732,10 @@ function stop_process {
         # Only do this for units which appear enabled, this also
         # catches units that don't really exist for cases like
         # keystone without a failure.
-        if $SYSTEMCTL is-enabled devstack@$service.service; then
-            $SYSTEMCTL stop devstack@$service.service
-            $SYSTEMCTL disable devstack@$service.service
+        ## A.Ahmadi: Bugfix for inactive services on all-in-one installation
+        if $SYSTEMCTL is-enabled devstack@$service.service 2>/dev/null; then
+            $SYSTEMCTL stop devstack@$service.service 2>/dev/null
+            $SYSTEMCTL disable devstack@$service.service 2>/dev/null
         fi
     fi
 }
@@ -1744,11 +1745,12 @@ function service_check {
     local service
     for service in ${ENABLED_SERVICES//,/ }; do
         # because some things got renamed like key => keystone
-        if $SYSTEMCTL is-enabled devstack@$service.service; then
+        ## A.Ahmadi: Bugfix for inactive services on all-in-one installation
+        if $SYSTEMCTL is-enabled devstack@$service.service 2>/dev/null; then
             # no-pager is needed because otherwise status dumps to a
             # pager when in interactive mode, which will stop a manual
             # devstack run.
-            $SYSTEMCTL status devstack@$service.service --no-pager
+            $SYSTEMCTL status devstack@$service.service --no-pager 2>/dev/null
         fi
     done
 }
