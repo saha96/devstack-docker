@@ -103,7 +103,7 @@ function configure_database_mysql {
     # because the package might have been installed already.
     ## A.Ahmadi: ubuntu 20.04: 'Access denied for user 'root'@'localhost' (using password: NO)'
     ## sudo mysqladmin -u root password $DATABASE_PASSWORD || true
-    sudo mysqladmin -uroot -p$DATABASE_PASSWORD || true
+    sudo mysqladmin -u root password $DATABASE_PASSWORD || true
 
     # In case of Mariadb, giving hostname in arguments causes permission
     # problems as it expects connection through socket
